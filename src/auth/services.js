@@ -1,4 +1,5 @@
 import authRepo from "./repository.js";
+import crypto from "node:crypto";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 
@@ -10,7 +11,6 @@ const authService = {
       throw new Error(`No existe usuario con email: ${email}`)
     }
 
-    console.log(user)
     if(!user.isEmailVerified){
       throw new Error("Correo electrónico no verificado")
     }
@@ -28,14 +28,21 @@ const authService = {
     }
 
     const token = await jwt.sign(user, process.env.JWT_SECRET);
-
-    await authRepo.updateLastLogin(user.id);
   
     return {
       access: true,
       token: token,
     };
-  }
+  },
+  generateHash: async (email) => {
+    const user = await authRepo.getUserByEmail(email);
+    if (!user) {
+      throw new Error(`No existe usuario con email: ${email}`)
+    }
+
+    const hash = crypto.randomUUID();
+    return await authRepo.saveHash(email, hash);
+  },
 }
 
 export default authService;
