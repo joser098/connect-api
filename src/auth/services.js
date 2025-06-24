@@ -27,7 +27,16 @@ const authService = {
       throw new Error("Correo o contraseña incorrectos");
     }
 
-    const token = await jwt.sign(user, process.env.JWT_SECRET);
+    const user_data = {
+      name: user.name,
+      last_name: user.last_name,
+      email: user.email,
+      role: user.role_name,
+      group: user.group_id,
+      // TODO: HACER DINAMICO 
+      redirectUrl: '/asignaciones'
+    };
+    const token = await jwt.sign(user_data, process.env.JWT_SECRET);
   
     return {
       access: true,
