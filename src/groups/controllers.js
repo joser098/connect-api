@@ -16,5 +16,9 @@ export  const groupsControl = {
   },
   deleteGroup: (req, res) => {
     res.send('delete group')
+  },
+  getAssignments: async (req, res) => {
+    const assignments = await groupsRepo.getAssignments();
+    return res.status(200).json(assignments);
   }
 }

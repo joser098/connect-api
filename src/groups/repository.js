@@ -9,6 +9,9 @@ const groupsRepo = {
         zones: true,
       }
     });
+  },
+  getAssignments: async () => {
+    return await prisma.assignments.findMany();
   }
 }
 
