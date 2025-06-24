@@ -9,18 +9,19 @@ datasource db {
 }
 
 model groups_ {
-  group_id         Int     @id @default(autoincrement())
+  group_id         Int           @id @default(autoincrement())
   zone_id          Int?
-  zone_description String? @db.VarChar(255)
-  community        String? @db.VarChar(100)
-  description      String? @db.Text
-  meet_day         String? @db.VarChar(20)
-  meet_time        String? @db.VarChar(20)
+  zone_description String?       @db.VarChar(255)
+  community        String?       @db.VarChar(100)
+  description      String?       @db.Text
+  meet_day         String?       @db.VarChar(20)
+  meet_time        String?       @db.VarChar(20)
   members_capacity Int?
-  members_count    Int?    @default(0)
-  status           String? @db.VarChar(100)
-  comments         String? @db.Text
-  zones            zones?  @relation(fields: [zone_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "groups__ibfk_1")
+  members_count    Int?          @default(0)
+  status           String?       @db.VarChar(100)
+  comments         String?       @db.Text
+  assignments      assignments[]
+  zones            zones?        @relation(fields: [zone_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "groups__ibfk_1")
   users            users[]
 
   @@index([zone_id], map: "zone_id")
@@ -33,10 +34,11 @@ model roles {
 }
 
 model zones {
-  id         Int       @id @default(autoincrement())
-  zone_id    String?   @db.VarChar(50)
-  label_zone String?   @db.VarChar(100)
-  groups_    groups_[]
+  id          Int           @id @default(autoincrement())
+  zone_id     String?       @db.VarChar(50)
+  label_zone  String?       @db.VarChar(100)
+  assignments assignments[]
+  groups_     groups_[]
 }
 
 model users {
@@ -53,7 +55,7 @@ model users {
   group_id        Int?
   isEmailVerified Boolean?  @default(false)
   isActive        Boolean?  @default(false)
-  lastLogin       DateTime? @db.DateTime(0)
+  last_login      DateTime? @db.DateTime(0)
   updated_at      DateTime? @default(now()) @db.DateTime(0)
   created_at      DateTime? @default(now()) @db.DateTime(0)
   groups_         groups_?  @relation(fields: [group_id], references: [group_id], onDelete: NoAction, onUpdate: NoAction, map: "users_ibfk_1")
@@ -61,4 +63,44 @@ model users {
 
   @@index([group_id], map: "group_id")
   @@index([role_id], map: "role_id")
+}
+
+model hash {
+  id    Int    @id @default(autoincrement())
+  hash  String @unique(map: "hash") @db.VarChar(150)
+  email String @db.VarChar(100)
+}
+
+model assignments {
+  id                    Int                @id @default(autoincrement())
+  name                  String?            @db.VarChar(50)
+  last_name             String?            @db.VarChar(50)
+  age                   Int?
+  gender                String?            @db.VarChar(25)
+  marital_status        String?            @db.VarChar(15)
+  phone                 String?            @db.VarChar(25)
+  email                 String?            @db.VarChar(50)
+  attend_with           String?            @db.VarChar(30)
+  hillsong_is_my_church Boolean?
+  has_selected_group    Boolean?
+  group_selected        Int?
+  member_from           String?            @db.VarChar(25)
+  service_selected      String?            @db.VarChar(25)
+  zone                  Int?
+  status                Int?
+  comments              String?            @db.VarChar(255)
+  groups_               groups_?           @relation(fields: [group_selected], references: [group_id], onDelete: NoAction, onUpdate: NoAction, map: "assignments_ibfk_1")
+  zones                 zones?             @relation(fields: [zone], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "assignments_ibfk_2")
+  assignment_status     assignment_status? @relation(fields: [status], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "assignments_ibfk_3")
+
+  @@index([group_selected], map: "group_selected")
+  @@index([zone], map: "zone")
+  @@index([status], map: "status")
+}
+
+model assignment_status {
+  id          Int           @id @default(autoincrement())
+  status      String?       @db.VarChar(50)
+  description String?       @db.VarChar(200)
+  assignments assignments[]
 }
