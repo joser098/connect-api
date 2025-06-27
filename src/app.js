@@ -4,6 +4,8 @@ import router from "./routes/index.js";
 
 const whitelist = [
   "http://localhost:4200",
+  "https://development.gruposdeconexion.info",
+  "https://gruposdeconexion.info"
 ];
 
 const app = express();
