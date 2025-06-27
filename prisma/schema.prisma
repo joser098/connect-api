@@ -89,6 +89,8 @@ model assignments {
   zone                  Int?
   status                Int?
   comments              String?            @db.VarChar(255)
+  created_at            DateTime?          @db.DateTime(0)
+  updated_at            DateTime?          @db.DateTime(0)
   groups_               groups_?           @relation(fields: [group_selected], references: [group_id], onDelete: NoAction, onUpdate: NoAction, map: "assignments_ibfk_1")
   zones                 zones?             @relation(fields: [zone], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "assignments_ibfk_2")
   assignment_status     assignment_status? @relation(fields: [status], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "assignments_ibfk_3")
