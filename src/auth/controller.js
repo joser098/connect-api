@@ -19,7 +19,7 @@ export  const authControl = {
 
       //VERIFICACION PARA USUARION GUARDADOS SIN CONTRASENA
       const user = await authRepo.getPassByEmail(email);
-      if (user.password == 'grupos123!') {
+      if (user && user.password == 'grupos123!') {
         const generated = await authService.generateHash(email);
         // ENVIAR CORREO
         const emailTemplate = emailTemplates.resetPassword.html(generated.hash);
