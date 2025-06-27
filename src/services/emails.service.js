@@ -1,4 +1,6 @@
 import { SendEmailCommand, SESClient } from "@aws-sdk/client-ses";
+import dotenv from "dotenv";
+dotenv.config();
 
 // Set the AWS Region.
 const REGION = "us-east-1";
