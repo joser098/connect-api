@@ -4,6 +4,7 @@ import { groupsControl } from "../groups/controllers.js";
 const groupsRouter = express.Router();
 
 groupsRouter.get("/", groupsControl.getAllGroups);
+groupsRouter.get("/find", groupsControl.getGroups)
 groupsRouter.get("/assignments", groupsControl.getAssignments);
 groupsRouter.post("/assignments", groupsControl.createAssignment);
 groupsRouter.put("/assignments/:id", groupsControl.updateAssignmentStatus);

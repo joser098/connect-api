@@ -1,5 +1,6 @@
 import emailTemplates from "../services/email-templates.js";
 import emailsService from "../services/emails.service.js";
+import { getCommunity } from "../services/scripts.js";
 import usersRepo from "../users/repository.js";
 import groupsRepo from "./repository.js";
 
@@ -7,6 +8,24 @@ export  const groupsControl = {
   getAllGroups: async (req, res) => {
     const groups = await groupsRepo.getAllGroups();
     return res.status(200).json(groups);
+  },
+  getGroups: async (req, res) => {
+    try {
+      const { age, zone } = req.query;
+    
+      if (!age || !zone) {
+        return res.status(400).json({ success: false, message: 'Age and zone are required' });
+      }
+
+      const community = getCommunity(+age);
+
+      const groups = await groupsRepo.getGroups(community, +zone)
+
+      // const groups = await groupsRepo.getGroups();
+      return res.status(200).json({ sucess: true, data: groups });
+    } catch (error) {
+      return res.status(500).json({ success: false, message: 'Error getting groups', error: error.message });
+    }
   },
   getGroup: (req, res) => {
     res.send('get group')
@@ -90,6 +109,7 @@ export  const groupsControl = {
         break;
       case 4:
         // Confirma asistencia y actualiza estado a finalizado y agrega fecha de finalizacion de la asignacion
+        // TODO: Enviar correo a lider y agregar grupoId a User
         await groupsRepo.updateAssignmentStatus(+id, 4);
         break;
       case 5:
