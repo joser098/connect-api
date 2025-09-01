@@ -15,7 +15,25 @@ const getCommunity = (age) => {
   }
 };
 
+const formatZones = (zones) => {
+  return zones.map(zone => {
+    const groups = zone.groups_;
+    const groupsCount = groups.length;
+    const totalPeople = groups.reduce((acc, g) => acc + g._count.users, 0);
+
+    return {
+      id: zone.id,
+      zone_id: zone.zone_id,
+      leader: zone.users ? `${zone.users.name} ${zone.users.last_name}` : null,
+      groupsCount,
+      totalPeople,
+      groupIds: groups.map(g => g.group_id),
+    };
+  });
+};
+
 export {
   getDate,
-  getCommunity
+  getCommunity,
+  formatZones
 }
