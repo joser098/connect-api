@@ -139,5 +139,26 @@ export  const groupsControl = {
     } catch (error) {
       return res.status(500).json({ success: false, message: 'Error assigning group', error: error.message });
     }
-  }
+  },
+  saveWelcomeCommunityPerson: async (req, res) => {
+    try {
+      // TODO: VALIDAR QUE NO EXISTA EL EMAIL Y QUE NO FALTEM CAMPOS
+      await groupsRepo.saveWelcomeCommunityPerson(req.body);
+
+      return res.status(200).json({ success: true, message: 'Welcomed community person successfully' });
+    } catch (error) {
+      return res.status(500).json({ success: false, message: 'Error welcoming community person', error: error.message });
+    }
+  },
+  getWelcomeCommunityList: async (req, res) => {
+    try {
+    const { date } = req.query;
+    console.log(date);
+
+    const welcomeCommunity = await groupsRepo.getWelcomeCommunityList(date);
+    return res.status(200).json(welcomeCommunity);
+    } catch (error) {
+      return res.status(500).json({ success: false, message: 'Error getting welcome community', error: error.message });
+    }
+  },
 }

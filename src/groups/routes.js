@@ -9,4 +9,6 @@ groupsRouter.get("/assignments", groupsControl.getAssignments);
 groupsRouter.post("/assignments", groupsControl.createAssignment);
 groupsRouter.put("/assignments/:id", groupsControl.updateAssignmentStatus);
 groupsRouter.put("/assign/:id", groupsControl.assignGroup);
+groupsRouter.post("/welcomeCommunityPerson", groupsControl.saveWelcomeCommunityPerson);
+groupsRouter.get("/welcomeCommunity", groupsControl.getWelcomeCommunityList);
 export default groupsRouter;

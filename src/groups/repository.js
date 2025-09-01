@@ -130,7 +130,40 @@ const groupsRepo = {
         group_selected: group_id
       }
     });
-  }
+  },
+  saveWelcomeCommunityPerson: async (data) => {
+    return await prisma.welcome_community.create({
+      data: {
+        name: data.name,
+        last_name: data.last_name,
+        phone: data.phone,
+        email: data.email,
+        created_at: getDate(),
+      }
+    })
+  },
+  getWelcomeCommunityList: async (date) => {
+    let where = {};
+
+    if (date && date !== "") {
+      const start = new Date(`${date}T00:00:00`);
+      const end   = new Date(`${date}T23:59:59`);
+      
+      where = {
+        created_at: {
+          gte: start,
+          lte: end,
+        },
+      };
+    }
+
+    return await prisma.welcome_community.findMany({
+      where,
+      orderBy: {
+        created_at: 'desc',
+      },
+    });
+  },
 }
 
 export default groupsRepo;
