@@ -18,7 +18,7 @@ model groups_ {
   meet_time                              String?         @db.VarChar(20)
   members_capacity                       Int?
   members_count                          Int?            @default(0)
-  status                                 String?         @db.VarChar(100)
+  status                                 Int?
   comments                               String?         @db.Text
   updated_at                             DateTime?       @default(now()) @db.DateTime(0)
   created_at                             DateTime?       @default(now()) @db.DateTime(0)
@@ -27,11 +27,13 @@ model groups_ {
   groups_zones                           groups_zones?   @relation(fields: [group_zone_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "groups__ibfk_1")
   locations                              locations?      @relation(fields: [location_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "groups__ibfk_2")
   community_groups__communityTocommunity community?      @relation("groups__communityTocommunity", fields: [community], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "groups__ibfk_3")
+  group_status                           group_status?   @relation(fields: [status], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "groups__ibfk_4")
   users                                  users[]
 
   @@index([community], map: "community")
   @@index([group_zone_id], map: "group_zone_id")
   @@index([location_id], map: "location_id")
+  @@index([status], map: "status")
 }
 
 model roles {
@@ -157,17 +159,19 @@ model group_history {
 }
 
 model group_status {
-  id          Int     @id @default(autoincrement())
-  status      String? @db.VarChar(50)
-  description String? @db.VarChar(100)
+  id          Int       @id @default(autoincrement())
+  status      String?   @db.VarChar(50)
+  description String?   @db.VarChar(100)
+  groups_     groups_[]
 }
 
 model welcome_community {
-  id         Int       @id @default(autoincrement())
-  name       String?   @db.VarChar(50)
-  last_name  String?   @db.VarChar(50)
-  email      String?   @unique(map: "email") @db.VarChar(50)
-  phone      String?   @db.VarChar(25)
-  dni        String?   @db.VarChar(25)
-  created_at DateTime? @db.DateTime(0)
+  id             Int       @id @default(autoincrement())
+  name           String?   @db.VarChar(50)
+  last_name      String?   @db.VarChar(50)
+  email          String?   @unique(map: "email") @db.VarChar(50)
+  phone          String?   @db.VarChar(25)
+  dni            String?   @db.VarChar(25)
+  form_completed Boolean?
+  created_at     DateTime? @db.DateTime(0)
 }
