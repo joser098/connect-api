@@ -7,7 +7,8 @@ const whitelist = [
   "https://development.gruposdeconexion.info",
   "https://gruposdeconexion.info",
   "http://localhost:4321",
-  "https://www.gruposdeconexion.info"
+  "https://www.gruposdeconexion.info",
+  "https://app-dev.gruposdeconexion.info"
 ];
 
 const app = express();
